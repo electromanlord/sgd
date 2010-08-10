@@ -1,0 +1,58 @@
+8
+
+dir
+0
+http://localhost:9090/svn/std100309/std/public_root/css
+http://localhost:9090/svn/std100309
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+admin.css
+file
+
+
+
+add
+
+general.css
+file
+
+
+
+add
+
+style_1.css
+file
+
+
+
+add
+
+style.css
+file
+
+
+
+add
+
+style_2.css
+file
+
+
+
+add
+
+style_3.css
+file
+
+
+
+add
+

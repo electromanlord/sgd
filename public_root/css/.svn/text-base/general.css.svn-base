@@ -1,0 +1,36 @@
+body{ background:transparent url('../imgs/bg.jpg') repeat-x; margin:0; padding:0; font:normal 11px "tahoma", Arial, Helvetica, sans-serif; color:#555}
+form{ margin:0; padding:5px}
+a{ text-decoration:none; color: #D3455A}
+input{ font-size:100%; border:1px solid #C9DEE7; color:#555; margin:1px}
+textarea{ border:1px solid #CAE3E0}
+.clear{ clear:both}
+fieldset { border:1px solid #ccc; width:94%; padding:10px;  }
+img{ border:0}
+ul,li{ margin:0; padding:0  }
+legend{
+  padding: 0.2em 0.5em;
+  border:1px solid #ccc;
+  color:#333;
+  font-size:98%;
+  text-align:left;
+  background-color:#F4F4F4;
+  width:100px;
+}
+
+legend a{font-weight:bold;}
+
+label{
+  float:left;
+  width:25%;
+  margin-right:0.5em;
+  padding-top:0.2em;
+  text-align:right;
+  font-weight:normal;
+}
+
+#transdiv {
+filter:alpha(opacity=75);
+-moz-opacity:.75;
+opacity:.75;
+}
+.img_pointer{ cursor:pointer;}

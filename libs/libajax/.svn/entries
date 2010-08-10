@@ -1,0 +1,30 @@
+8
+
+dir
+41
+http://localhost:9090/svn/std/std/libs/libajax
+http://localhost:9090/svn/std
+
+
+
+2009-03-05T19:42:26.125000Z
+2
+
+
+
+svn:special svn:externals svn:needs-lock
+
+_notes
+dir
+
+ajax.js
+file
+
+
+
+
+2009-03-04T13:16:33.531250Z
+265c7410502fcdf387a7b94c0ed28681
+2009-03-05T19:42:26.125000Z
+2
+

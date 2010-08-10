@@ -1,0 +1,36 @@
+	/* CSS Document */
+	
+	body{
+		top:5px;
+		bottom:5px;
+		left:5px;
+		right:5px;
+	}
+	
+	#form_detalle_documento{
+		font-size:09px;
+		font-family:tahoma;
+	}
+	
+	#detalle_documento, #detalle_documento table{
+		display:block;
+		visibility:visible;
+	}
+	
+	#imprimir, #verDetalles{
+		display:none;
+	}
+	fieldset{
+		width:98%;
+	}
+	.Estilo7{
+		background-color:#6699CC;
+	}
+	#movimientos{
+		width:100%;
+		border-collapse:collapse;
+	}
+	#movimientos td{
+		font-size:9px;
+		border:1px #45729F solid;
+	}

@@ -1,0 +1,19 @@
+#tooltip {
+	position: absolute;
+	z-index: 3000;
+ 	background-color: #FEFAEB;
+    border: 1px dotted #D3455A;
+	padding: 5px;
+	opacity: .90;
+	-moz-opacity:.90;
+	filter:alpha(opacity=90);
+	width:200px;	
+}
+#tooltip h3, #tooltip div { 
+	margin: 0; 
+    color: #D3455A;
+	font-size: 10px;
+	font-family: verdana;
+	font-weight:normal;
+	
+}

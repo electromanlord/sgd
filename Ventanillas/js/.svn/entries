@@ -1,0 +1,65 @@
+8
+
+dir
+0
+http://localhost:9090/svn/std100309/std/Ventanillas/js
+http://localhost:9090/svn/std100309
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+_js.js
+file
+
+
+
+add
+
+_notes
+dir
+
+
+
+add
+
+js.js
+file
+
+
+
+add
+
+jquery_1.js
+file
+
+
+
+add
+
+jquery.js
+file
+
+
+
+add
+
+Copia de js.js
+file
+
+
+
+add
+
+calc.js
+file
+
+
+
+add
+

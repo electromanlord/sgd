@@ -1,0 +1,27 @@
+8
+
+dir
+41
+http://localhost:9090/svn/std/std/public_root/js/_notes
+http://localhost:9090/svn/std
+
+
+
+2009-03-05T19:42:26.125000Z
+2
+
+
+
+svn:special svn:externals svn:needs-lock
+
+dwsync.xml
+file
+
+
+
+
+2009-03-04T13:13:31.796875Z
+85d06587a5bab75b01b9bcbfeccc7335
+2009-03-05T19:42:26.125000Z
+2
+

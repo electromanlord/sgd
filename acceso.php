@@ -3,7 +3,6 @@
 		<label></label>
 		<br />
 		<table width="232" border="0" align="center" cellpadding="0" cellspacing="0">
-            <!--  Login Form-->
           <tr>
             <td width="63" height="28" class="Estilo22" style="vertical-align:middle"><div align="left">Usuario</div></td>
             <td width="9" class="Estilo22" style="vertical-align:middle"><div align="center">:</div></td>

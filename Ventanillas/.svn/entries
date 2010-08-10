@@ -1,0 +1,86 @@
+8
+
+dir
+0
+http://localhost:9090/svn/std100309/std/Ventanillas
+http://localhost:9090/svn/std100309
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+cls
+dir
+
+
+
+add
+
+requerimientos.php
+file
+
+
+
+add
+
+acceso_registro.php
+file
+
+
+
+add
+
+RegistrarDocs.php
+file
+
+
+
+add
+
+libs
+dir
+
+
+
+add
+
+IngresarDatos.php
+file
+
+
+
+add
+
+reporte_RO-RDR.php
+file
+
+
+
+add
+
+js
+dir
+
+
+
+add
+
+index.php
+file
+
+
+
+add
+
+ficha_registro.php
+file
+
+
+
+add
+

@@ -1,0 +1,39 @@
+/* CSS Document */
+
+.cabecera_documento {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-style: normal;
+	font-weight: bold;
+	text-transform: capitalize;
+	color: #FFFFFF;
+	background-color: #2873AA;
+}
+.contenido {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #333333;
+}
+.contenido td{
+	white-space:nowrap;
+	overflow:hidden;
+}
+h1 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: bold;
+	text-transform: capitalize;
+	color: #114E8A;
+}
+.cuerpo_tabla {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+}
+.negrita {
+	font-weight: bold; 
+}
+.tabla-reporte td,th{
+	padding:2px;
+}
