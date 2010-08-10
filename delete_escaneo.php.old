@@ -1,0 +1,8 @@
+<?php include("includes.php"); 
+	$id = isset($_GET['id']) ? $_GET['id'] : 0; 
+	
+	unlink('../sad/Escaneado_completo/'.$_REQUEST["cod"].'/'.$_REQUEST["nom"]);
+	$sql = " DELETE FROM documentos_escaneados WHERE id_documento_escaneado = '".$id."' ";
+	$query = new Consulta($sql);
+	echo "Se eliminaron correctamente lo(s) documentos escaneados";	
+?>
