@@ -905,45 +905,135 @@ function DespacharEliminarDestino($id,$ids){
     }
 
 }
-/**********************************************************/
-////FIN REEMPLAZAR
-/**********************************************************/
-function RegistraFiltrar(){
+    /**********************************************************/
+    ////FIN REEMPLAZAR
+    /**********************************************************/
+    function RegistraFiltrar(){
 
-    $sql_estado =  "SELECT *
-					FROM estados AS e
-					WHERE e.display = 1
-					ORDER BY e.nombre_estado ASC";
-					
-    $q_estado=new Consulta($sql_estado);
-    ?>
+        $sql_estado =  "SELECT *
+                        FROM estados AS e
+                        WHERE e.display = 1
+                        ORDER BY e.nombre_estado ASC";
+                        
+        $q_estado=new Consulta($sql_estado);
+        ?>
 
-<form name="f5" method="post" action="<?=$_SESSION['PHP_SELF']?>?opcion=list&ide=<?=$ide?>">
+    <form name="f5" method="post" action="<?=$_SESSION['PHP_SELF']?>?opcion=list&ide=<?=$ide?>">
 
-    <table width="100%" height="50" border="0" >
-        <tr>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td align="center">
-			<select name="ide">
-            <option value="">---Estado---</option>
-              <?
-                        while($row_estado=$q_estado->ConsultaVerRegistro()){
-                    		$ide=$row_estado[0];?>
-            <option value="<?=$row_estado[0]?>"<? if(isset($ide) && $ide== $row_estado[0]){ echo "selected";} ?>>
-              <?=$row_estado[1]?>
-            </option>
-			<option value="LT">LISTAR TODOS</option>
-              <?}?>
-            </select></td>
-        </tr>
-        <tr>
-              <td align="center" ><input name="Filtrar" type="submit"  value="Filtrar"/></td>
-        </tr>
-</table>
-</form>
-<?
-}
+        <table width="100%" height="50" border="0" >
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td align="center">
+                <select name="ide">
+                <option value="">---Estado---</option>
+                  <?
+                            while($row_estado=$q_estado->ConsultaVerRegistro()){
+                                $ide=$row_estado[0];?>
+                <option value="<?=$row_estado[0]?>"<? if(isset($ide) && $ide== $row_estado[0]){ echo "selected";} ?>>
+                  <?=$row_estado[1]?>
+                </option>
+                <option value="LT">LISTAR TODOS</option>
+                  <?}?>
+                </select></td>
+            </tr>
+            <tr>
+                  <td align="center" ><input name="Filtrar" type="submit"  value="Filtrar"/></td>
+            </tr>
+    </table>
+    </form>
+    <?
+    }
+    
+    
+    function RegistraAgregar($ids){ 
+
+        $sql_resumen="
+            SELECT
+                documentos.id_documento,
+                documentos.codigo_documento,
+                remitentes.nombre_remitente,
+                tipos_documento.nombre_tipo_documento,
+                documentos.numero_documento,
+                documentos.referencia_documento,
+                documentos.anexo_documento,
+                documentos.numero_folio_documento,
+                documentos.fecha_documento,
+                documentos.fecha_registro_documento,
+                dc.categoria
+            FROM
+                documentos
+            LEFT Join remitentes ON remitentes.id_remitente = documentos.id_remitente
+            LEFT JOIN documentos_categorias AS dc ON dc.id_documento = documentos.id_documento
+                Inner Join tipos_documento ON tipos_documento.id_tipo_documento = documentos.id_tipo_documento
+            WHERE
+                documentos.id_documento = '".$ids."'
+            ";
+
+        $query_resumen=new Consulta($sql_resumen);
+        $row_resumen=$query_resumen->ConsultaVerRegistro(); 
+
+        $_POST['nombre']=$row_resumen[2];
+        $_POST['ids']=$row_resumen[0];
+
+        $documento = new Documento($ids);
+        
+        $remitente_etiquetas = array(
+            'TUPA'=>"TUPA",
+            'TRANS'=>"Transparencia",
+            'GUIA'=>"Gu&iacute;a de Servicio",
+            'OTRO'=>"Otros.."
+        );
+        
+        #Conseguir documentos escaneados
+        $escaneo = "SELECT * 
+                    from documentos_escaneados de
+                    where de.id_documento = ".$ids;
+                
+        $qescaneo = new Consulta($escaneo);
+        $escaneos = $qescaneo->getRows();
+        
+        # Conseguir la Prioridad guardada en el Documento
+        $edi="
+            SELECT
+			`td`.`asunto_documento`,
+			`td`.`observacion_documento`,
+			`td`.`id_prioridad`
+			FROM
+			`documentos` AS `td`
+			WHERE
+			`td`.`id_documento` =  '".$ids."'
+            ";
+        $qedit=new Consulta($edi);	
+        $row_edit=$qedit->ConsultaVerRegistro();
+        $cboprioridad=$row_edit['id_prioridad'];
+        # Listar Prioridades
+		$sql_prioridad="
+            SELECT 
+                prioridades.id_prioridad, 
+                prioridades.nombre_prioridad, 
+                prioridades.tiempo_horas_respuesta_prioridad
+            FROM 
+                prioridades
+            ORDER BY 
+                prioridades.id_prioridad ASC
+            ";
+		$query_prioridad=new Consulta($sql_prioridad);    
+        
+        #listar acciones
+        $acciones = new Acciones();
+        $accions = $acciones->getAcciones(3,$_SESSION['session'][0]);	
+        $tacciones = sizeof($accions);   
+        
+        #listar areas
+        $sql_areas="SELECT areas.id_area, areas.abve_nombre_area FROM areas";
+        $query_areas=new Consulta($sql_areas);
+        
+        require "Templates/registro.php";
+    }
+
+
+    
 }
 ?>

@@ -1311,6 +1311,7 @@ function habilita_copia(){
 }
 
 function deshabilita_copia(){    
+//alert("test");
 	if(document.getElementById("copia")){
 		$("#copia").attr("disabled","disabled");
 		$("#copia").attr("class","disabled");    

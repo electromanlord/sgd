@@ -1,13 +1,22 @@
 <?php  
 	include("includes.php");
 	require_once("cls/mesa_acceso_registro.cls.php");
-
+    #ini_set('display_errors',1);
 	if(!$_SESSION['session'][3] == "SI" ){?>
 		<script>location.href="error_permisos.php";</script>
  	<?
 	}
 	$menu = array(0,1,0,0,1,0);
-	
+    /*
+	$txt = "
+    fsdafsa
+    fsdafsd
+    fsdafasd
+    fsdafsdafdsafsd
+    fsdafdsa";
+    $txt = preg_replace("/\r?(\n|(\s\s+))/m", " ", $txt); 
+    echo $txt;exit;
+    */
 	$unload = "";
 	//if(isset($_REQUEST["opcion"])&&$_REQUEST["opcion"]!="list"&&$_REQUEST["opcion"]!="busqueda") 
 		//$unload = "onunload=verificar_asunto()";
@@ -50,6 +59,9 @@ function cambia_saldo(id_total){
 
 
 							switch($opcion){
+										case 'new':
+											Registro::RegistraAgregar($ids);	
+										break;	
 										case 'list':
 											Registro::RegistraListado($ide);	
 										break;	
