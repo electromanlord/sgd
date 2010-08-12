@@ -6,10 +6,17 @@
 		<script>location.href="error_permisos.php";</script>
  	<?
 	}
-	$menu = array(0,1,0,0,1,0);
+	$menu = array(1,1,0,0,1,0);
 	$unload = "";
-	//if(isset($_REQUEST["opcion"])&&$_REQUEST["opcion"]!="list"&&$_REQUEST["opcion"]!="busqueda") 
-		//$unload = "onunload=verificar_asunto()";
+    
+    $opcion = $_REQUEST['opcion'];
+    $ide = $_REQUEST['ide'];
+    $ids = $_REQUEST['ids'];
+    $campo = $_REQUEST['campo'];
+    $valor = $_REQUEST['valor'];
+    if($opcion =="guardar"){
+        Registro::RegistraGuardar();	
+    }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -58,21 +65,10 @@
 					<td style="width:100%; height:417px"><?php
  						
                     #dump($_SESSION);	
-						$opcion = $_REQUEST['opcion'];
-						$ide = $_REQUEST['ide'];
-						$ids = $_REQUEST['ids'];
-						$campo = $_REQUEST['campo'];
-						$valor = $_REQUEST['valor'];
-
 
 							switch($opcion){
 										case 'new':
 											Registro::RegistraAgregar($ids);	
-										break;	
-										case 'guardar':
-											Registro::RegistraGuardar();
-											Registro::ConsultarDocumento($ids);		
-											Registro::DespacharListarDestino($ids);		
 										break;	
 										case 'list':
 											Registro::RegistraListado($ide);	

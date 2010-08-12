@@ -1022,13 +1022,18 @@ function DespacharEliminarDestino($id,$ids){
         $estado=3;
                 
         #############################################
+        #dump($post);
         
-        
-        if( $post->remit!="" ) {
+        if( isset($post->remit) && $post->remit!="" ) {
             $remits=explode(",", $post->remit); 
             $remit=$remits[1];
         }else{		
-            $remit=Registro::RegistraGuardarRemitente($_POST["remitente"],substr($_POST["remitente"],0,4),2);
+
+            $sql_re="Insert Into remitentes Values('','2','".$_POST["remitente"]."','".substr($_POST["remitente"],0,4)."','','1')";
+            $q_remite= new Consulta($sql_re);
+            $remit= $q_remite->NuevoId();
+            
+            #$remit=Registro::RegistraGuardarRemitente($_POST["remitente"],substr($_POST["remitente"],0,4),2);
         }
 
         //Calculamos el año actual
@@ -1135,9 +1140,9 @@ function DespacharEliminarDestino($id,$ids){
                         '".$radiobutton."',
                         '".$cboaccion."',
                         '".$_SESSION['session'][0]."',
-                        '".$estado."',
+                        '".$var_estado."',
                         '".$textarea."')";
-            echo $guades;exit;
+            #echo $guades;exit;
             $qdest=new Consulta($guades);
             $id_hist=$qdest->NuevoId();
 
@@ -1184,10 +1189,15 @@ function DespacharEliminarDestino($id,$ids){
             <script type="text/javascript"> 
                 javascript:imprimir("Ventanillas/ficha_registro.php?id=<?php echo $nuevo_id?>");
                 location.href="Ventanillas_acceso_registro.php";
-            </script>
+            </script> 
             */
+            echo "fasfdsafsd";
+            #ini_set("display_errors",1);
+            header("Location: ./mesa_acceso_registro.php?opcion=despachar&ids=$nuevo_id");
+            exit;
+            
         }else{
-                #<div id="error">Ocurrio un error, Cierre su Sesión Actual y vuelva a iniciar Sesion</div>	
+            echo    "<div id='error'>Ocurrio un error, Cierre su Sesión Actual y vuelva a iniciar Sesion</div>	";
         }
     }
 

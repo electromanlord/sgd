@@ -88,7 +88,7 @@
       <td height="28" bgcolor="#ffffff" class="Estilo22"><div align="left">Observaci&oacute;n de Registro</div></td>
       <td height="28" bgcolor="#ffffff" class="Estilo22"><div align="center">:</div></td>
       <td colspan="6"><div align="left">
-        <textarea name="textarea2" id="textarea2" rows="3" cols="100" ></textarea>
+        <textarea name="observ" id="observ" rows="3" cols="100" ></textarea>
       </div></td>
       </tr>
     </tbody>
@@ -195,11 +195,11 @@
         <td width="39%" rowspan="3" bgcolor="#ffffff" class="Estilo22" ><div align="left">
           <textarea name="textfield4" id="textfield4" rows="4" cols="50" class="caja"></textarea>
         </div>
-        <td height="25" align="center" class="Estilo21"><div align="center"><span >(*)</span></div></td>
-        <td width="3%" align="center"><div align="center"><span class="Estilo22" style="vertical-align:middle">
-            <input name="radiobutton" value="1" type="radio" id="original">
-        </span></div></td>
-        <td width="13%" align="center" class="Estilo22"><div align="left">Original</div></td>
+        <td height="25" align="center" class="Estilo21"> </td>
+        <td width="3%" align="center"> 
+            <input name="radiobutton" value="1" type="hidden" id="original">
+         </td>
+        <td width="13%" align="center" class="Estilo22"> </td>
       </tr>
 	  <tr>
 	    <td class="Estilo21" style="vertical-align:middle">(*)</td>
@@ -217,10 +217,8 @@
 	        </select>
         </div>		</td>
 	    <td width="3%" height="24" align="center" class="Estilo21">&nbsp;</td>
-        <td height="24" align="center"><div align="center"><span class="Estilo22" style="vertical-align:middle">
-            <input name="radiobutton" value="2" type="radio" id="copia">
-        </span></div></td>
-        <td height="24" align="center" class="Estilo22"><div align="left">Copia</div></td>
+        <td height="24" align="center"></td>
+        <td height="24" align="center" class="Estilo22"></td>
 	  </tr>
 	  <tr>
 	    <td class="Estilo21">&nbsp;</td>
@@ -230,7 +228,7 @@
         <td height="21" colspan="2" align="center"><div align="center">
 
             <div align="left">
-              <input type="submit" name="Cargar Lista2" value="Cargar Lista" class="boton"/>
+              <input type="submit" name="Cargar Lista2" value="Guardar Registro" class="boton submit"/>
               </div>
         </div></td>
       </tr>

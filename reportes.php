@@ -227,7 +227,7 @@ jQuery(document).ready(function(){
 								>Reporte de Productividad por Usuario</a>
 					<? #print_r($_SESSION);
 
-						if( $_SESSION["session"][2] == "Admin Area" || $_SESSION["session"][2] == "Admin. Total" ) {?>			|		 
+						if( $_SESSION["session"][2] == "Admin. Area" || $_SESSION["session"][2] == "Admin. Total" ) {?>			|		 
 							<a href="reportes.php?atencion=1" class="<?=(isset($get->atencion)? 'active':'')?>"
 								>Reporte por area de atenci&oacute;n</a>		|		
 							<a href="reportes.php?remitentes=1"  class="<?=(isset($get->remitentes)? 'active':'')?>"

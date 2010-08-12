@@ -26,6 +26,7 @@ th.titulo{padding:5px 15px;text-align:left;color:#666;}
 .main_links a{padding:0 10px;font-size:110%;}
 .active{font-weight:bold;}
 .left{text-align:left;}
+.submit{font-size:12px;padding:5px 15px;cursor:pointer;}
 #usuario{
 	background-image:url(../imgs/icon_user.png);
 	background-repeat:no-repeat;	
