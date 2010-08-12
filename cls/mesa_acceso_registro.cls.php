@@ -1009,6 +1009,20 @@ function DespacharEliminarDestino($id,$ids){
         $destino=$_POST["destino"]; 
         $observ=$_POST["observ"]; 
         $post = $_POST;
+        ############## Guardar Despacho #################
+        $nombre=$_POST['nombre'];
+        $fecha_actual = time();
+        $fecha=date("Y-m-d H:i:s",$fecha_actual);
+        $cboareas=$_POST['cboareas'];
+        $radiobutton=$_POST['radiobutton'];
+        $cboaccion=$_POST['cboaccion'];
+        $cboprioridad=$_POST['cboprioridad'];
+        $textfield2=$_POST['textfield2'];
+        $textarea=$_POST['textfield4'];
+        $estado=3;
+                
+        #############################################
+        
         
         if( $post->remit!="" ) {
             $remits=explode(",", $post->remit); 
@@ -1038,10 +1052,14 @@ function DespacharEliminarDestino($id,$ids){
         $anp = new Anp($_SESSION['session'][7]);
         
         $codigo = $anp->getSiglas()."-".$codigo;
-        $var_estado=1;
-        $fecha_actual = time();
+        $var_estado=3;
         
         if(isset($_SESSION['session'][7])){
+        
+        
+            $prioridad = new Prioridad($cboprioridad);
+
+        
             $guarda="INSERT INTO documentos VALUES ('',
                     '".$codigo."',
                     '".$codigo_n."',
@@ -1051,10 +1069,10 @@ function DespacharEliminarDestino($id,$ids){
                     '".$anexo."',
                     '".$num_folio."',
                     '".formato_date('/',$FechaSol)."',
-                    '',
+                    '".$textfield2."',
                     '".date("Y-m-d H:i:s",$fecha_actual)."',
                     '".$observ."',
-                    '',
+                    '".$cboprioridad."',
                     '".$_SESSION['session'][0]."',
                     '".$remit."',
                     '".$var_estado."',
@@ -1073,15 +1091,15 @@ function DespacharEliminarDestino($id,$ids){
                     '".$codigo."',
                     '".$num_doc."',
                     '".$remitente->getNombre()."',
-                    '',
+                    '".$textfield2."',
                     '".$tipo_doc->getNombre()."',			
                     '".$num_folio."',
-                    '".$refe."',
+                    '".$refe."', 
                     '".$anexo."',
                     '".$observ."',
-                    '',
+                    '".$prioridad->getNombre()."',
                     '".formato_date('/',$FechaSol)."',
-                    '".date("Y-m-d H:i:s",$fecha_actual)."',
+                    '".$fecha."',
                     '',
                     '".$estado->getAbreviatura()."',
                     '".$row_anio["anio"]."',							
@@ -1105,8 +1123,64 @@ function DespacharEliminarDestino($id,$ids){
                 ";
                 $q_doc_cat=new Consulta($sql_doc_cat);	
             }
-                
+            
+            ########### DespacharGuardarDestino ################
+
+            $guades =  "Insert INTO
+                        historial_documentos values('',
+                        '".$nuevo_id."',
+                        '',
+                        '".$cboareas."',
+                        '".$fecha."',
+                        '".$radiobutton."',
+                        '".$cboaccion."',
+                        '".$_SESSION['session'][0]."',
+                        '".$estado."',
+                        '".$textarea."')";
+            echo $guades;exit;
+            $qdest=new Consulta($guades);
+            $id_hist=$qdest->NuevoId();
+
+            $sqlrep =  "SELECT id_documento_reporte as id
+                        FROM documentos_reporte
+                        WHERE id_documento=$nuevo_id";
+            
+            $qrep=new Consulta($sqlrep);
+            $rowrep=$qrep->VerRegistro();
+            $documento = new Documento($nuevo_id);
+            $remitente = $documento->getRemitente();
+            $area = new Area($cboareas);
+            $accion = new Accion($cboaccion);
+            $ubicacion = "";
+            
+            
+            $est='D';
+            $esta='DESPACHADO';
+            $ubicacion = $area->getAbreviatura();
+
+            
+            //Para el reporte
+            $sql_mov = "Insert INTO
+                        movimientos values('',
+                        '".$rowrep['id']."',
+                        '".$id_hist."',
+                        'DESPACHO GENERAL',
+                        '".$area->getNombre()."',            
+                        '".$accion->getNombre()."',
+                        '".$radiobutton."',
+                        '".$usuario->getLogin()."',
+                        '".$textarea."',
+                        '".$fecha."',
+                        '".$esta."',
+                        '".$ubicacion."',				
+                        '1')";
+            
+            $q_mov=new Consulta($sql_mov);
+            
             /*
+
+            ###########################################
+                
             <script type="text/javascript"> 
                 javascript:imprimir("Ventanillas/ficha_registro.php?id=<?php echo $nuevo_id?>");
                 location.href="Ventanillas_acceso_registro.php";

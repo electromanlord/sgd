@@ -1,3 +1,4 @@
+ <form name="form_despacho" id="form_despacho" method="post"  action="<?php echo $_SERVER['PHP_SELF']?>?opcion=guardar" >  
 <fieldset>
   <legend class="Estilo9">DATOS DEL DOCUMENTO</legend>
   <table width="98%" border="0" align="center" bordercolor="#000000" bgcolor="#ffffff">
@@ -94,7 +95,6 @@
 </table>
 </fieldset>
 
- <form name="form_despacho" id="form_despacho" method="post"  action="<?php echo $_SERVER['PHP_SELF']?>?opcion=des_guard&ids=<?=$_REQUEST['ids']?>" >  
 
   <fieldset>
   <legend >ESTABLECER ASUNTO Y PRIORIDAD</legend>
