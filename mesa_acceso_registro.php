@@ -7,16 +7,6 @@
  	<?
 	}
 	$menu = array(0,1,0,0,1,0);
-    /*
-	$txt = "
-    fsdafsa
-    fsdafsd
-    fsdafasd
-    fsdafsdafdsafsd
-    fsdafdsa";
-    $txt = preg_replace("/\r?(\n|(\s\s+))/m", " ", $txt); 
-    echo $txt;exit;
-    */
 	$unload = "";
 	//if(isset($_REQUEST["opcion"])&&$_REQUEST["opcion"]!="list"&&$_REQUEST["opcion"]!="busqueda") 
 		//$unload = "onunload=verificar_asunto()";
@@ -24,15 +14,31 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>M&Oacute;DULO DE TRAMITE DOCUMENTARIO/ MESA DE PARTES </title>
-<?php include("includes/inc.header.php"); ?>
-<script type="text/javascript" src="public_root/js/leyendas/cargar_estados.js"></script>
+    <title>M&Oacute;DULO DE TRAMITE DOCUMENTARIO/ MESA DE PARTES </title>
+    <?php include("includes/inc.header.php"); ?>
+    <script type="text/javascript" src="public_root/js/leyendas/cargar_estados.js"></script>
+    <script type="text/javascript" src="public_root/js/calendar/calendar.js"></script>
+    <script type="text/javascript" src="public_root/js/calendar/calendar-es.js"></script>
+    <script type="text/javascript" src="public_root/js/calendar/calendar-setup.js"></script>
+    <script type="text/javascript" src="public_root/js/jquery.autocomplete.js"></script>
+    <link href="public_root/css/jquery.autocomplete.css" rel="stylesheet" />
+    <link href="public_root/js/calendar/calendar-blue2.css" rel="stylesheet" />
 <script type="text/javascript">
-function cambia_saldo(id_total){
-	var id_doc = $("#id_documento").val();
-	$("#capa_saldo").load("carga_saldo.php?horas=s&id_total="+id_total).fadeIn("slow");
-	$("#fecha_respuesta").load("carga_saldo.php?fechar="+id_total+"&id="+id_doc).fadeIn("slow");
-}
+    function cambia_saldo(id_total){
+        var id_doc = $("#id_documento").val();
+        $("#capa_saldo").load("carga_saldo.php?horas=s&id_total="+id_total).fadeIn("slow");
+        $("#fecha_respuesta").load("carga_saldo.php?fechar="+id_total+"&id="+id_doc).fadeIn("slow");
+    }
+    <?if($_GET['opcion']=="new"){?>
+    $(function(){
+          Calendar.setup({
+              inputField  : "date_registrar",
+              ifFormat    : "%d/%m/%Y",
+              weekNumbers: false,
+              button      : "trigger_registrar"
+            });
+      });
+      <?}?>
 </script>
 </head>
 <body <?=$unload?>>
@@ -50,7 +56,8 @@ function cambia_saldo(id_total){
 			</tr>									
 				<tr>								
 					<td style="width:100%; height:417px"><?php
- 							
+ 						
+                    #dump($_SESSION);	
 						$opcion = $_REQUEST['opcion'];
 						$ide = $_REQUEST['ide'];
 						$ids = $_REQUEST['ids'];
@@ -61,6 +68,11 @@ function cambia_saldo(id_total){
 							switch($opcion){
 										case 'new':
 											Registro::RegistraAgregar($ids);	
+										break;	
+										case 'guardar':
+											Registro::RegistraGuardar();
+											Registro::ConsultarDocumento($ids);		
+											Registro::DespacharListarDestino($ids);		
 										break;	
 										case 'list':
 											Registro::RegistraListado($ide);	
