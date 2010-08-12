@@ -1,101 +1,93 @@
-
 <fieldset>
   <legend class="Estilo9">DATOS DEL DOCUMENTO</legend>
   <table width="98%" border="0" align="center" bordercolor="#000000" bgcolor="#ffffff">
     <tbody>
       <tr>
-        <td width="223" class="Estilo22"><div align="left">N&ordm; Registro</div></td>
-        <td width="10" class="Estilo22"><div align="center">:</div></td>
-        <td width="98" bgcolor="#ffffff"><div align="left">
-          <?=$row_resumen[1]?>
-        </div></td>
-        <td width="139" bordercolor="#D6D3CE" bgcolor="#ffffff">&nbsp;</td>
-        <td width="113" bgcolor="#ffffff">&nbsp;</td>
-        <td bgcolor="#ffffff" class="Estilo22"><div align="left"></div></td>
-        <td class="Estilo22" bgcolor="#ffffff"><div align="left"></div></td>
-        <td width="211" >&nbsp;</td>
-      </tr>
-      <tr>
         <td width="223"class="Estilo22"><div align="left">Remitente</div></td>
         <td width="10" bgcolor="#ffffff" class="Estilo22"><div align="center">:</div></td>
         <td colspan="3" bgcolor="#ffffff"><div align="left">
           <?=$row_resumen[2]?>
-        </div></td>
-        <td width="98" class="Estilo22"><div align="left"><span>Nro de Folios</span></div></td>
-        <td width="11" class="Estilo22"><div align="center">:</div></td>
-        <td><div align="left">
-          <?=$row_resumen[numero_folio_documento]?>
+          <input name="remitente" id="text_remitente" type="text" class=" caja"  size="100">
         </div></td>
       </tr>
+    <tr>
+   		  <td class="Estilo22 left"> Tipo<span align="left" class="Estilo21" > (*) </span> </td>
+   		  <td class="Estilo22"><div align="center">:</div></td>
+   		  <td bgcolor="#FFFFFF" colspan="6">
+                <div align="left">
+                <span style="display:inline-block;margin-right:10px;">
+                  <select name="tipo" class="tipo_doc">
+                    <option value="">-Tipo de Documento-</option>
+                    <?
+                        while($row_tipo=$query_tipo->ConsultaVerRegistro()){?>
+                        <option value="<?=$row_tipo[0]?>"
+                            <? if(isset($_POST['tipo']) && $_POST['tipo']== $row_tipo[0]){ echo "selected";} ?>>
+                            <?=$row_tipo[1]?>
+                        </option>
+                    <?  } ?>
+                    </select>
+                </span>    
+		<span class="">
+		        <span class="Estilo22 " >Clase</span>
+		        <span align="left" class="Estilo21 ">(*)</span>
+		        <select name="categoria_doc" type="text" id="categoria_doc" class="">
+		            <option value="">Seleccionar...</option>
+		            <?foreach( $remitente_etiquetas as $k=>$cat){?>
+		                <option value="<?=$k?>"><?=$cat?></option>
+		            <?}?>
+		        </select>
+		        <!-- Expediente -->
+		        <span id="span_expediente" class="hidden">
+		            <span class="Estilo22">Expediente No.:</span>
+		            <strong><?=$exp?></strong>
+		            <input type="hidden" name="expediente" value="<?=$exp?>"  />
+		        </span>
+		        <!-- End Expediente -->
+		</span>
+ 		    </div>
+          </td>
+    </tr>
+   	<tr>
+   		  <td class="Estilo22"><div align="left" class="Estilo22">Documento</div></td>
+   		  <td class="Estilo22"><div align="center">:</div></td>
+   		  <td bgcolor="#FFFFFF" class="left"><span class="Estilo2 ">
+   		    <input name="num_doc" type="text" id="num_doc" value="" style="width:290px" class="caja"/>
+	      </span>
+          <span class="Estilo21">(*)</span><span class="Estilo22">Fecha :</span>
+            <input name="date_registrar" type="text" id="date_registrar" class="inputbox caja" size="15" value="" readonly="readonly"/>
+            <input name="image2" type="image" id="trigger_registrar" src="public_root/imgs/calendar.png" width="20" height="20" hspace="1"  style="border:none;vertical-align:middle"/>
+        </td>
+    </tr>
       <tr>
-        <td width="223" bgcolor="#ffffff"><div align="right">
-            <div align="left" class="Estilo22">Nro. Documento</div>
-        </div></td>
-        <td width="10" class="Estilo22" ><div align="center">:</div></td>
-        <td colspan="3" bgcolor="#ffffff"><div align="left">
-          <?=$row_resumen[numero_documento]?>
-        </div></td>
-        <td class="Estilo22"><div align="left">Fecha de Doc </div></td>
-        <td class="Estilo22"><div align="center">:</div></td>
-        <td><div align="left"><?php echo date('d/m/Y',strtotime($row_resumen[fecha_documento]))?></div></td>
-      </tr>
-      <tr>
-        <td class="Estilo22"><div align="left">Tipo de Documento</div></td>
+        <td class="Estilo22"><div align="left">Nro de Folios</div></td>
         <td class="Estilo22"><div align="center">:</div></td>
         <td colspan="6"><div align="left">
-          <?=$row_resumen[nombre_tipo_documento]?>
+            <input name="num_folio" type="text" size="12" class="caja"/>
         </div>
         <div align="left"></div></td>
       </tr>
       <tr>
-        <td  width="223" class="Estilo22"><div align="right">
-            <div align="left">Referencia</div>
-        </div></td>
-        <td  width="10" class="Estilo22"><div align="center">:</div></td>
-        <td colspan="6"><div align="left">
-          <?=$row_resumen[referencia_documento]?>
-        </div></td>
-      </tr>
-      <tr>
-        <td  width="223" class="Estilo22"><div align="right">
-            <div align="left">Anexos</div>
-        </div></td>
-        <td  width="10" class="Estilo22"><div align="center">:</div></td>
-        <td colspan="6"><div align="left">
-          <?=$row_resumen[anexo_documento]?>
-        </div></td>
-      </tr>
-      <tr>
-        <td class="Estilo22"><div align="left">Documento Digitalizado </div></td>
+        <td class="Estilo22"><div align="left">Referencia</div></td> 
         <td class="Estilo22"><div align="center">:</div></td>
-        <td colspan="6">
-			  <div align="left"><span class="Estilo7">
-                  <?foreach( $escaneos as $index => $escaneo ){?>
-                        <a href="<?=(!$escaneo->fecha_escaneo? "Escaneo/".$escaneo->nombre_documento_escaneado :  "../sad/Escaneado_completo/".$row_resumen[1]."/".$escaneo->nombre_documento_escaneado )?>" 
-                                id="<?=$row_reg["id_documento_escaneado"]?>" target="_blank"><?=$index+1?></a>		
-                  <?}?>
-		      </span>
-			  </div>
-		</td>
+        <td colspan="6"><div align="left">
+            <input name="refe" value="" type="text" size="100" class="caja"/>
+        </div>
+        <div align="left"></div></td>
       </tr>
       <tr>
-        <td height="28" ><div align="right" class="Estilo22">
-          <div align="left">Fecha y Hora de Registro</div>
-        </div></td>
-        <td height="28"  class="Estilo22"><div align="center">:</div></td>
-        <td height="28" ><div align="left"><?php echo date('d/m/Y H:i',strtotime($row_resumen[fecha_registro_documento]))?></div></td>
-        <td height="28" ><div align="left"></div></td>
-        <td><div align="left"></div></td>
-        <td colspan="2" bordercolor="#D6D3CE" bgcolor="#ffffff"><div align="left"></div></td>
-		<td><div align="left"></div></td>
+        <td class="Estilo22"><div align="left">Anexos</div></td>
+        <td class="Estilo22"><div align="center">:</div></td>
+        <td colspan="6"><div align="left">
+            <input name="anexo" value="" type="text" size="100" class="caja"/>
+        </div>
+        <div align="left"></div></td>
       </tr>
       <tr>
 
       <td height="28" bgcolor="#ffffff" class="Estilo22"><div align="left">Observaci&oacute;n de Registro</div></td>
       <td height="28" bgcolor="#ffffff" class="Estilo22"><div align="center">:</div></td>
       <td colspan="6"><div align="left">
-        <textarea name="textarea2" id="textarea2" rows="3" cols="100" disabled="disabled" class="disabled"><?=$row_edit[1]?>
-      </textarea>
+        <textarea name="textarea2" id="textarea2" rows="3" cols="100" ></textarea>
       </div></td>
       </tr>
     </tbody>

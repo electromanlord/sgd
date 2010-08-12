@@ -947,35 +947,7 @@ function DespacharEliminarDestino($id,$ids){
     }
     
     
-    function RegistraAgregar($ids){ 
-
-        $sql_resumen="
-            SELECT
-                documentos.id_documento,
-                documentos.codigo_documento,
-                remitentes.nombre_remitente,
-                tipos_documento.nombre_tipo_documento,
-                documentos.numero_documento,
-                documentos.referencia_documento,
-                documentos.anexo_documento,
-                documentos.numero_folio_documento,
-                documentos.fecha_documento,
-                documentos.fecha_registro_documento,
-                dc.categoria
-            FROM
-                documentos
-            LEFT Join remitentes ON remitentes.id_remitente = documentos.id_remitente
-            LEFT JOIN documentos_categorias AS dc ON dc.id_documento = documentos.id_documento
-                Inner Join tipos_documento ON tipos_documento.id_tipo_documento = documentos.id_tipo_documento
-            WHERE
-                documentos.id_documento = '".$ids."'
-            ";
-
-        $query_resumen=new Consulta($sql_resumen);
-        $row_resumen=$query_resumen->ConsultaVerRegistro(); 
-
-        $_POST['nombre']=$row_resumen[2];
-        $_POST['ids']=$row_resumen[0];
+    function RegistraAgregar( ){ 
 
         $documento = new Documento($ids);
         
@@ -985,29 +957,19 @@ function DespacharEliminarDestino($id,$ids){
             'GUIA'=>"Gu&iacute;a de Servicio",
             'OTRO'=>"Otros.."
         );
+        #Tipo
+        $sql_tipo ="SELECT * 
+                    FROM tipos_documento 
+                    WHERE entrada_salida = 0 || entrada_salida = 2
+                    ORDER BY tipos_documento.nombre_tipo_documento ASC";
+        $query_tipo=new Consulta($sql_tipo);
         
-        #Conseguir documentos escaneados
-        $escaneo = "SELECT * 
-                    from documentos_escaneados de
-                    where de.id_documento = ".$ids;
-                
-        $qescaneo = new Consulta($escaneo);
-        $escaneos = $qescaneo->getRows();
-        
-        # Conseguir la Prioridad guardada en el Documento
-        $edi="
-            SELECT
-			`td`.`asunto_documento`,
-			`td`.`observacion_documento`,
-			`td`.`id_prioridad`
-			FROM
-			`documentos` AS `td`
-			WHERE
-			`td`.`id_documento` =  '".$ids."'
-            ";
-        $qedit=new Consulta($edi);	
-        $row_edit=$qedit->ConsultaVerRegistro();
-        $cboprioridad=$row_edit['id_prioridad'];
+        #expediente            
+        $sql_exp = "SELECT max(e.id_expediente) as nuevo_id FROM expedientes e ";
+        $query_exp = new Consulta($sql_exp);
+        $exp = mysql_fetch_object( $query_exp->Consulta_ID) ;
+        $exp = str_pad( ( $exp->nuevo_id? $exp->nuevo_id+1 : 1 ) ,7, "0" , STR_PAD_LEFT );
+    
         # Listar Prioridades
 		$sql_prioridad="
             SELECT 
@@ -1031,6 +993,128 @@ function DespacharEliminarDestino($id,$ids){
         $query_areas=new Consulta($sql_areas);
         
         require "Templates/registro.php";
+    }
+
+
+    function RegistraGuardar(){
+
+        $num_folio=$_POST["num_folio"];
+        $tipo=$_POST["tipo"]; 
+        $categoria=$_POST["categoria_doc"]; 
+        $expediente=$_POST["expediente"]; 
+        $num_doc=$_POST["num_doc"]; 
+        $FechaSol=$_POST["date_registrar"]; 
+        $refe=$_POST["refe"]; 
+        $anexo=$_POST["anexo"]; 
+        $destino=$_POST["destino"]; 
+        $observ=$_POST["observ"]; 
+        $post = $_POST;
+        
+        if( $post->remit!="" ) {
+            $remits=explode(",", $post->remit); 
+            $remit=$remits[1];
+        }else{		
+            $remit=Registro::RegistraGuardarRemitente($_POST["remitente"],substr($_POST["remitente"],0,4),2);
+        }
+
+        //Calculamos el año actual
+        $anio_actual = date("Y");
+        
+        $sql_anio = "SELECT * FROM anio WHERE anio = ".$anio_actual;
+        $query_anio = new Consulta($sql_anio);
+        $row_anio = $query_anio->ConsultaVerRegistro();
+        
+        $sql_cod = "SELECT 
+                     Max(td.numeracion_documento) AS codigo
+                     FROM documentos AS td
+                     WHERE id_anio=".$row_anio["id_anio"];
+                    
+        $query_codigo = new Consulta($sql_cod);		
+        $row_codigo = $query_codigo->ConsultaVerRegistro();
+        $codigo_n = $row_codigo['codigo']+1;
+        
+        $codigo = sprintf("%05d",$codigo_n).'-'.$row_anio["anio"];
+        
+        $anp = new Anp($_SESSION['session'][7]);
+        
+        $codigo = $anp->getSiglas()."-".$codigo;
+        $var_estado=1;
+        $fecha_actual = time();
+        
+        if(isset($_SESSION['session'][7])){
+            $guarda="INSERT INTO documentos VALUES ('',
+                    '".$codigo."',
+                    '".$codigo_n."',
+                    '".$tipo."',
+                    '".$num_doc."',
+                    '".$refe."',
+                    '".$anexo."',
+                    '".$num_folio."',
+                    '".formato_date('/',$FechaSol)."',
+                    '',
+                    '".date("Y-m-d H:i:s",$fecha_actual)."',
+                    '".$observ."',
+                    '',
+                    '".$_SESSION['session'][0]."',
+                    '".$remit."',
+                    '".$var_estado."',
+                    '".$row_anio["id_anio"]."')";
+        
+            $q_guarda=new Consulta($guarda);
+            $nuevo_id = $q_guarda->NuevoId();
+             //Insertar en las tablas de busqueda
+             $remitente = new Remitente($remit);
+             $tipo_doc = new TipoDocumento($tipo);
+             $estado = new Estado($var_estado);
+            $usuario= new Usuario($_SESSION['session'][0]);
+        
+             $reporte="INSERT INTO documentos_reporte VALUES ('',
+                        '".$q_guarda->NuevoId()."',
+                    '".$codigo."',
+                    '".$num_doc."',
+                    '".$remitente->getNombre()."',
+                    '',
+                    '".$tipo_doc->getNombre()."',			
+                    '".$num_folio."',
+                    '".$refe."',
+                    '".$anexo."',
+                    '".$observ."',
+                    '',
+                    '".formato_date('/',$FechaSol)."',
+                    '".date("Y-m-d H:i:s",$fecha_actual)."',
+                    '',
+                    '".$estado->getAbreviatura()."',
+                    '".$row_anio["anio"]."',							
+                    '".$usuario->getLogin()."',
+                    '')";
+        
+            $q_reporte=new Consulta($reporte);	
+            
+            $sql_doc_cat = "
+                INSERT INTO documentos_categorias
+                    (id_documento,categoria) 
+                    VALUES( '$nuevo_id','$categoria' )
+            ";
+            $q_doc_cat=new Consulta($sql_doc_cat);	
+            
+            if( $categoria =="TUPA" ){
+                $sql_doc_cat = "
+                    INSERT INTO expedientes
+                        (codigo_expediente,id_documento) 
+                        VALUES( '$expediente', '$nuevo_id' )
+                ";
+                $q_doc_cat=new Consulta($sql_doc_cat);	
+            }
+                
+            /*
+            <script type="text/javascript"> 
+                javascript:imprimir("Ventanillas/ficha_registro.php?id=<?php echo $nuevo_id?>");
+                location.href="Ventanillas_acceso_registro.php";
+            </script>
+            */
+        }else{
+                #<div id="error">Ocurrio un error, Cierre su Sesión Actual y vuelva a iniciar Sesion</div>	
+        }
     }
 
 
