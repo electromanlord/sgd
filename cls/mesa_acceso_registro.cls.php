@@ -325,6 +325,8 @@ function ConsultarDocumento($ids){
 	$_POST['nombre']=$row_resumen[2];
 	$_POST['ids']=$row_resumen[0];
 
+    $post = (object)$_POST;
+    $get = (object)$_GET;
 	$documento = new Documento($ids);
     
     $remitente_etiquetas = array(
@@ -336,6 +338,15 @@ function ConsultarDocumento($ids){
     
 		?>
 
+<?if($get->ok){?>
+    <div class="ok">
+        Documento Guardado 
+        ID N° <strong><?=$get->ids?></strong> 
+        <a href="#" class="print" id="print" param="<?=$get->ids?>">
+            [ Imprimir  ]
+        </a>
+    </div>
+<?}?>
 
 <fieldset>
 
@@ -578,11 +589,10 @@ function ConsultarDocumento($ids){
         <td width="39%" rowspan="3" bgcolor="#ffffff" class="Estilo22" ><div align="left">
           <textarea name="textfield4" id="textfield4" rows="4" cols="50" class="caja"></textarea>
         </div>
-        <td height="25" align="center" class="Estilo21"><div align="center"><span >(*)</span></div></td>
+        <td height="25" align="center" class="Estilo21"></td>
         <td width="3%" align="center"><div align="center"><span class="Estilo22" style="vertical-align:middle">
-            <input name="radiobutton" value="1" type="radio" id="original">
         </span></div></td>
-        <td width="13%" align="center" class="Estilo22"><div align="left">Original</div></td>
+        <td width="13%" align="center" class="Estilo22"></td>
       </tr>
 	  <tr>
 	    <td class="Estilo21" style="vertical-align:middle">(*)</td>
@@ -605,9 +615,9 @@ function ConsultarDocumento($ids){
         </div>		</td>
 	    <td width="3%" height="24" align="center" class="Estilo21">&nbsp;</td>
         <td height="24" align="center"><div align="center"><span class="Estilo22" style="vertical-align:middle">
-            <input name="radiobutton" value="2" type="radio" id="copia">
+            <input name="radiobutton" value="2" type="hidden" id="copia">
         </span></div></td>
-        <td height="24" align="center" class="Estilo22"><div align="left">Copia</div></td>
+        <td height="24" align="center" class="Estilo22"></td>
 	  </tr>
 	  <tr>
 	    <td class="Estilo21">&nbsp;</td>
@@ -1008,7 +1018,8 @@ function DespacharEliminarDestino($id,$ids){
         $anexo=$_POST["anexo"]; 
         $destino=$_POST["destino"]; 
         $observ=$_POST["observ"]; 
-        $post = $_POST;
+        $post = (object)$_POST;
+        $get = (object)$_GET;
         ############## Guardar Despacho #################
         $nombre=$_POST['nombre'];
         $fecha_actual = time();
@@ -1193,7 +1204,7 @@ function DespacharEliminarDestino($id,$ids){
             */
             echo "fasfdsafsd";
             #ini_set("display_errors",1);
-            header("Location: ./mesa_acceso_registro.php?opcion=despachar&ids=$nuevo_id");
+            header("Location: ./mesa_acceso_registro.php?opcion=despachar&ids=$nuevo_id&ok=1");
             exit;
             
         }else{

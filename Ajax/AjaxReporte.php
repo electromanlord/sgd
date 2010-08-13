@@ -78,12 +78,15 @@ if(!$_GET['rem']&&!$_GET['asu']&&!$_GET['fecha1']&&!$_GET['fecha2']&&!$_GET['doc
 }
 	 
 if($_GET['reg']){ 
-    if ( strlen($reg) <=5 && is_numeric($reg) ){
+    $reg = trim($_GET['reg']);
+    if ( strlen($reg) <=5  ){
         $reg =str_pad( $_GET['reg'] , 5, "0", STR_PAD_LEFT);
         $where .=" AND( numero_registro like '%-$reg-%' ) "; 
     }else{
         $where .=" AND( numero_registro like '%$reg%' ) ";
     }
+        /*
+    */
 } 
 
 if($_GET['vencidos']){

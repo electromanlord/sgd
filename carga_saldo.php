@@ -18,7 +18,7 @@
      
 	 ?>
 
-     <input name="saldo" type="text" bgcolor="#999999" value="<?=$dol_prio[2]?>" size="1" readonly="" id="saldo" style="border:none"/>
+     <input name="saldo" type="text" bgcolor="#999999" value="<?=intval( $dol_prio[2] )?>" size="1" readonly="" id="saldo" style="border:none"/>
 
 	<?php 
 		

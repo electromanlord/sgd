@@ -14,6 +14,8 @@
     $ids = $_REQUEST['ids'];
     $campo = $_REQUEST['campo'];
     $valor = $_REQUEST['valor'];
+    $get =(object) $_GET;
+    #dump($get);
     if($opcion =="guardar"){
         Registro::RegistraGuardar();	
     }

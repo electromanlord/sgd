@@ -7,7 +7,11 @@ var busqueda = 0; 	//Simple : 1
 					//Avanzada : 2
 
 $(document).ready(function(){		
-
+    
+    $("a.print").click(function(e){
+        e.preventDefault();
+        imprimir("Ventanillas/ficha_registro.php?id=" + this.getAttribute('param') );
+    });
 	$(".caja").focus(function(){
 		$(this).attr("class","con_focus");					   
 	});
@@ -142,12 +146,20 @@ $(document).ready(function(){
 	
 		error: "error",
 		rules: {
+			remitente: "required",
+			tipo: "required",
+			date_registrar: "required",
+			categoria_doc: "required",
 			cboprioridad: "required",
 			cboareas: "required",
 			cboaccion: "required",
 			radiobutton: "required"
 		},
 		messages: {
+			remitente: "",
+			tipo: "",
+			date_registrar: "",
+			categoria_doc: "",
 			cboprioridad: "",
 			cboareas: "",
 			cboaccion: "",

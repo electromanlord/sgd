@@ -4,7 +4,7 @@
   <table width="98%" border="0" align="center" bordercolor="#000000" bgcolor="#ffffff">
     <tbody>
       <tr>
-        <td width="223"class="Estilo22"><div align="left">Remitente</div></td>
+        <td width="223"class="Estilo22"><div align="left">Remitente<span  class="Estilo21" > (*) </span></div></td>
         <td width="10" bgcolor="#ffffff" class="Estilo22"><div align="center">:</div></td>
         <td colspan="3" bgcolor="#ffffff"><div align="left">
           <?=$row_resumen[2]?>
@@ -12,11 +12,11 @@
         </div></td>
       </tr>
     <tr>
-   		  <td class="Estilo22 left"> Tipo<span align="left" class="Estilo21" > (*) </span> </td>
+   		  <td class="Estilo22 left"> Tipo<span  class="Estilo21" > (*) </span> </td>
    		  <td class="Estilo22"><div align="center">:</div></td>
    		  <td bgcolor="#FFFFFF" colspan="6">
                 <div align="left">
-                <span style="display:inline-block;margin-right:10px;">
+                <span style="margin-right:10px;">
                   <select name="tipo" class="tipo_doc">
                     <option value="">-Tipo de Documento-</option>
                     <?
@@ -54,7 +54,7 @@
    		  <td bgcolor="#FFFFFF" class="left"><span class="Estilo2 ">
    		    <input name="num_doc" type="text" id="num_doc" value="" style="width:290px" class="caja"/>
 	      </span>
-          <span class="Estilo21">(*)</span><span class="Estilo22">Fecha :</span>
+          <span class="Estilo22">Fecha <span class="Estilo21">(*)</span>:</span>
             <input name="date_registrar" type="text" id="date_registrar" class="inputbox caja" size="15" value="" readonly="readonly"/>
             <input name="image2" type="image" id="trigger_registrar" src="public_root/imgs/calendar.png" width="20" height="20" hspace="1"  style="border:none;vertical-align:middle"/>
         </td>
@@ -150,9 +150,9 @@
       <?}else{?>
             <td colspan="4"></td>
       <?}?>
-      <td class="Estilo22"><div align="left">Fecha Estimada de Respuesta</div></td>
-      <td class="Estilo22"><div align="center">:</div></td>
-      <td height="21" colspan="2" class="Estilo23"><div id="fecha_respuesta"></div></td>
+      <td class="Estilo22"> </td>
+      <td class="Estilo22"> </td>
+      <td height="21" colspan="2" class="Estilo23"> </td>
 	  <td>&nbsp;</td>
     </tr>
   </table>
