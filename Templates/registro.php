@@ -55,7 +55,7 @@
    		    <input name="num_doc" type="text" id="num_doc" value="" style="width:290px" class="caja"/>
 	      </span>
           <span class="Estilo22">Fecha <span class="Estilo21">(*)</span>:</span>
-            <input name="date_registrar" type="text" id="date_registrar" class="inputbox caja" size="15" value="" readonly="readonly"/>
+            <input name="date_registrar" type="text" id="date_registrar" class="inputbox caja" size="15" value="<?=date("d/m/Y");?>" readonly="readonly"/>
             <input name="image2" type="image" id="trigger_registrar" src="public_root/imgs/calendar.png" width="20" height="20" hspace="1"  style="border:none;vertical-align:middle"/>
         </td>
     </tr>
