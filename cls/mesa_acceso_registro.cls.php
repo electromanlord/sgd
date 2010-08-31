@@ -326,6 +326,8 @@ function ConsultarDocumento($ids){
 	$_POST['ids']=$row_resumen[0];
 
     $post = (object)$_POST;
+    $sess = (object)$_SESSION;
+    unset($_SESSION['save']);
     $get = (object)$_GET;
 	$documento = new Documento($ids);
     
@@ -338,7 +340,13 @@ function ConsultarDocumento($ids){
     
 		?>
 
-<?if($get->ok){?>
+<?if($sess->save){?>
+    <script type="text/javascript">
+        $(function(){
+            imprimir("Ventanillas/ficha_registro.php?id=<?=$get->ids?>");
+        });
+    </script>
+<?}?>
     <div class="ok">
         Documento Guardado 
         ID N° <strong><?=$get->ids?></strong> 
@@ -346,7 +354,6 @@ function ConsultarDocumento($ids){
             [ Imprimir  ]
         </a>
     </div>
-<?}?>
 
 <fieldset>
 
@@ -589,10 +596,17 @@ function ConsultarDocumento($ids){
         <td width="39%" rowspan="3" bgcolor="#ffffff" class="Estilo22" ><div align="left">
           <textarea name="textfield4" id="textfield4" rows="4" cols="50" class="caja"></textarea>
         </div>
+               <td height="25" align="center" class="Estilo21"><div align="center"><span >(*)</span></div></td>
+        <td width="3%" align="center"><div align="center"><span class="Estilo22" style="vertical-align:middle">
+            <input name="radiobutton" value="1" type="radio" id="original">
+        </span></div></td>
+        <td width="13%" align="center" class="Estilo22"><div align="left">Original</div></td>
+        <!--
         <td height="25" align="center" class="Estilo21"></td>
         <td width="3%" align="center"><div align="center"><span class="Estilo22" style="vertical-align:middle">
         </span></div></td>
         <td width="13%" align="center" class="Estilo22"></td>
+        -->
       </tr>
 	  <tr>
 	    <td class="Estilo21" style="vertical-align:middle">(*)</td>
@@ -614,10 +628,16 @@ function ConsultarDocumento($ids){
 	        </select>
         </div>		</td>
 	    <td width="3%" height="24" align="center" class="Estilo21">&nbsp;</td>
+	           <td height="24" align="center"><div align="center"><span class="Estilo22" style="vertical-align:middle">
+            <input name="radiobutton" value="2" type="radio" id="copia">
+        </span></div></td>
+        <td height="24" align="center" class="Estilo22"><div align="left">Copia</div></td>
+	    <!--
         <td height="24" align="center"><div align="center"><span class="Estilo22" style="vertical-align:middle">
             <input name="radiobutton" value="2" type="hidden" id="copia">
         </span></div></td>
         <td height="24" align="center" class="Estilo22"></td>
+        -->
 	  </tr>
 	  <tr>
 	    <td class="Estilo21">&nbsp;</td>
@@ -978,7 +998,7 @@ function DespacharEliminarDestino($id,$ids){
         $sql_exp = "SELECT max(e.id_expediente) as nuevo_id FROM expedientes e ";
         $query_exp = new Consulta($sql_exp);
         $exp = mysql_fetch_object( $query_exp->Consulta_ID) ;
-        $exp = str_pad( ( $exp->nuevo_id? $exp->nuevo_id+1 : 1 ) ,7, "0" , STR_PAD_LEFT );
+        $exp = str_pad( ( $exp->nuevo_id? $exp->nuevo_id+1 : 1 ) ,7, "0" , STR_PAD_LEFT ) . "-" . date('Y');
     
         # Listar Prioridades
 		$sql_prioridad="
@@ -1201,9 +1221,10 @@ function DespacharEliminarDestino($id,$ids){
                 javascript:imprimir("Ventanillas/ficha_registro.php?id=<?php echo $nuevo_id?>");
                 location.href="Ventanillas_acceso_registro.php";
             </script> 
-            */
-            echo "fasfdsafsd";
             #ini_set("display_errors",1);
+            */
+            $_SESSION['save'] = true;
+            echo "fasfdsafsd";
             header("Location: ./mesa_acceso_registro.php?opcion=despachar&ids=$nuevo_id&ok=1");
             exit;
             

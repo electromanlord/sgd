@@ -27,8 +27,8 @@ th.titulo{padding:5px 15px;text-align:left;color:#666;}
 .active{font-weight:bold;}
 .left{text-align:left;}
 .submit{font-size:12px;padding:5px 15px;cursor:pointer;}
-.ok{background:#8CD32B;border:1px solid #5A881C;padding:10px 20px; color:#333;margin:2px 4px;font-size:12px;}
-.ok a{text-decoration:none;font-weight:bold;color:#fff;margin:0 10px;text-transform:uppercase;}
+.ok{background:#EBF8FF;border:1px solid #6BA6E1;padding:10px 20px; color:#666;margin:2px 4px;font-size:12px;}
+.ok a{text-decoration:none;font-weight:bold;color:#333;margin:0 10px;text-transform:uppercase;}
 #usuario{
 	background-image:url(../imgs/icon_user.png);
 	background-repeat:no-repeat;	

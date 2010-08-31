@@ -32,6 +32,7 @@
     <script type="text/javascript" src="public_root/js/jquery.autocomplete.js"></script>
     <link href="public_root/css/jquery.autocomplete.css" rel="stylesheet" />
     <link href="public_root/js/calendar/calendar-blue2.css" rel="stylesheet" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 <script type="text/javascript">
     function cambia_saldo(id_total){
         var id_doc = $("#id_documento").val();

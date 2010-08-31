@@ -1,22 +1,42 @@
 <? 
  
 	///http://localhost/std/php-barcode-0.3pl1/barcode.php
+	#ini_set("display_errors",1);	
 	session_start();
+    $get = (object)$_GET;
 	if($_GET[pdf]=='ok'){
 		require_once('../../pdf/html2fpdf.php');
-		
 		ob_start();
-	}
-	
+	} 
 	include("../includes.php");
 	require_once("../cls/ventanillas_acceso_registro.cls.php");
 	$link=new Conexion();
-	#ini_set("display_errors",1);	
-	$sql="Select * from documentos as d where d.id_documento='".$_GET['id']."'";
+	$sql="SELECT * FROM documentos as d WHERE d.id_documento='".$_GET['id']."'";
 	$q_reg=new Consulta($sql);		
 	$rowreg=$q_reg->ConsultaVerRegistro();
 	$doc = new Documento($_GET['id']);
-	#dump($doc);
+    
+    $sql = "
+        SELECT 
+            hd.id_historial_documento as id,
+            DATE_FORMAT(hd.fecha_historial_documento,'%d-%m-%Y') as fecha,
+            a.nombre_area as area,
+            ac.nombre_accion as accion
+        FROM 
+            sernanp.historial_documentos hd
+            INNER JOIN 
+                sernanp.documentos d ON d.id_documento = hd.id_documento
+            INNER JOIN
+                sernanp.areas a ON a.id_area = hd.id_area 
+            INNER JOIN 
+                sernanp.accion ac ON ac.id_accion = hd.id_accion
+        WHERE
+            hd.id_documento = '$get->id' 
+    ";
+    $derivacion = new Consulta($sql);
+    $derivacion = $derivacion->getRows();
+    $derivacion = $derivacion[0];
+    #dump($derivacion);
     
 	$tipo=$rowreg["id_tipo_documento"];
 	$remitente=$rowreg["id_remitente"];
@@ -137,6 +157,12 @@
 			<td width="22%" align="center" class="Estilo2" >&nbsp;</td>
         </tr>
         <tr>
+			<td align="left" class="Estilo1" ><strong><?=$derivacion->area?></strong></td>
+			<td align="left" class="Estilo1" ><strong><?=$derivacion->fecha?></strong></td>
+			<td width="13%" align="right" class="Estilo1" ><strong><?=$derivacion->accion?></strong></td>
+			<td width="22%" align="center" class="Estilo2" > </td>
+        </tr>
+        <tr>
 			<td height="21" colspan="4" align="left">
 				<p>___________________________________________</p>			</td>
         </tr>
@@ -183,6 +209,8 @@
 	</table>
 </body>
 <script>
-	javascript:salida_impresora();
+	/*
+    */
+    javascript:salida_impresora();
 	window.close();
 </script>
