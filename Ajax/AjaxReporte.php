@@ -132,12 +132,16 @@ if( $_GET['nodespachado'] ){
 				  ) , '-') != '-' 
     ";
 }
+if($_GET['tupa']){
+    $where .="	AND (dr.numero_documento like '%tupa%' OR e.codigo_expediente != '' )";
+}
 
 	$sql = "SELECT
 			dr.id_documento_reporte
 			FROM
 			documentos_reporte AS dr
             LEFT JOIN prioridades as p ON p.nombre_prioridad = dr.prioridad
+            LEFT JOIN expedientes as e ON e.id_documento = dr.id_documento
 			$where";
 
 #echo $sql;
@@ -188,6 +192,7 @@ $SQL = "SELECT
 		FROM
 		documentos_reporte AS dr
         LEFT JOIN prioridades as p ON p.nombre_prioridad = dr.prioridad
+        LEFT JOIN expedientes as e ON e.id_documento = dr.id_documento
 		$where
 		ORDER BY $sidx $sord LIMIT $start , $limit
 		

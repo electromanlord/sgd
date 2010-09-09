@@ -1044,6 +1044,7 @@ function DespacharEliminarDestino($id,$ids){
         $nombre=$_POST['nombre'];
         $fecha_actual = time();
         $fecha=date("Y-m-d H:i:s",$fecha_actual);
+        $fecha_respuesta=date("Y-m-d H:i:s", ( $_POST['saldo'] * (60*60*24) )+ $fecha_actual);
         $cboareas=$_POST['cboareas'];
         $radiobutton=$_POST['radiobutton'];
         $cboaccion=$_POST['cboaccion'];
@@ -1136,7 +1137,7 @@ function DespacharEliminarDestino($id,$ids){
                     '".$prioridad->getNombre()."',
                     '".formato_date('/',$FechaSol)."',
                     '".$fecha."',
-                    '',
+                    '".$fecha_respuesta."',
                     '".$estado->getAbreviatura()."',
                     '".$row_anio["anio"]."',							
                     '".$usuario->getLogin()."',

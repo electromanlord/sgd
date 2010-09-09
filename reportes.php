@@ -15,6 +15,119 @@
         ini_set('display_errors', 1);
     }
     
+    /*
+     * Mega Reporte
+    */
+
+
+    $fixReporte = "
+    
+            UPDATE documentos_reporte dr 
+            INNER JOIN 
+             (
+	            SELECT 
+			            id_documento,
+			            CONCAT(
+				            IF(area_destino,a.abve_nombre_area, au.abve_nombre_area),
+				            IF(destino, CONCAT('-' , u.login_usuario ), '' )
+			            )	as ubicacion
+                FROM
+                     (
+					                   SELECT
+		                                hd.id_historial_documento AS id,
+		                                id_documento,
+		                                '6' AS tipo,
+		                                null AS usuario,
+		                                null AS area,
+		                                null AS destino,
+		                                hd.id_area AS area_destino,				
+		                                DATE_FORMAT(hd.fecha_historial_documento, '%Y-%m-%d %H:%i') AS fecha
+						            FROM
+		                                historial_documentos AS hd				
+						            WHERE
+		                                hd.id_documento IN (select id_documento from documentos_reporte)
+		                                AND hd.original_historial_documento = 1
+		                                
+						            UNION
+		                            
+						            SELECT
+		                                ha.id_historial_atencion AS id,
+		                                id_documento,
+		                                ha.tipo_historial_atencion AS tipo,
+		                                ha.id_usuario AS usuario,
+		                                ha.id_area AS area,
+		                                ha.id_usuario_destino AS destino,
+		                                ha.id_area_destino AS area_destino,
+		                                DATE_FORMAT(ha.fecha_historial_atencion, '%Y-%m-%d %H:%i') AS fecha
+		                            FROM
+		                                historial_atencion AS ha
+		                            WHERE
+		                                ha.id_documento IN (select id_documento from documentos_reporte) AND
+		                                (ha.tipo_historial_atencion = 0 OR ha.tipo_historial_atencion = 1
+		                                 OR ha.tipo_historial_atencion = 2 OR ha.tipo_historial_atencion = 4)
+		                                AND ha.original_historial_atencion = 1
+		                                 
+		                            UNION
+		                            
+		                            SELECT
+		                                b.id_borrador_respuesta AS id,
+		                                id_documento,
+		                                3 AS tipo,
+		                                b.id_usuario AS usuario,
+		                                b.id_area AS area,
+		                                b.id_destino AS destino,
+		                                null AS area_destino,
+		                                DATE_FORMAT(b.fecha_borrador_respuesta, '%Y-%m-%d %H:%i') AS fecha
+		                            FROM
+		                                borradores_respuesta AS b
+		                            WHERE
+		                                b.id_documento  IN (select id_documento from documentos_reporte)
+		                                
+		                            UNION
+		                            
+				            SELECT
+		                                d.id_devuelto AS id,
+		                                id_documento,
+		                                '7' AS tipo,
+		                                d.id_usuario AS usuario,
+		                                d.id_area AS area,
+		                                null AS destino,
+		                                 null AS area_destino,
+		                                DATE_FORMAT(d.fecha_devolucion, '%Y-%m-%d %H:%i') AS fecha
+						            FROM
+		                                devuelto AS d
+						            WHERE
+		                                d.id_documento  IN (select id_documento from documentos_reporte)
+		                        
+		                           
+						            ORDER BY fecha DESC
+		                     ) as r
+		                     
+		            LEFT JOIN areas a ON a.id_area = r.area_destino
+		            LEFT JOIN usuarios u ON u.id_usuario = r.destino
+		            LEFT JOIN areas au ON u.id_area = au.id_area
+		
+	            WHERE 	CONCAT(
+				            IF(destino, CONCAT( u.login_usuario, '-' ), '' ),
+				            IF(area_destino,a.abve_nombre_area, au.abve_nombre_area)
+			            ) != ''
+			
+                  GROUP BY id_documento 			
+		
+            ) as   z 
+            ON z.id_documento = dr.id_documento
+            SET dr.ubicacion = z.ubicacion
+            WHERE dr.id_documento = z.id_documento
+    ";
+    
+    $reporte = new Consulta($fixReporte);
+			
+			
+    /*
+     * Mega Reporte
+    */
+
+
     
 	if(!$_SESSION['session'][3] == "SI" ){
         ?>
@@ -162,15 +275,16 @@ jQuery(document).ready(function(){
     
     
     function setFilter(e){
+    
         jQuery("#frmgrid").setGridParam({url:"Ajax/AjaxReporte.php?"+D.filters.serialize() ,page:1}).trigger("reloadGrid"); 
     }
     
     /************************************************/
     
 	$.jgrid.defaults = $.extend($.jgrid.defaults,{loadui:"enable"});	
-
+    //alert(D.tupa);
    	$grid = jQuery("#frmgrid").jqGrid({
-        url:'Ajax/AjaxReporte.php?todos=1',
+        url:'Ajax/AjaxReporte.php?todos=1' + (D.tupa? "&tupa=1":""),
         datatype: "json",
         colNames:['asunto','N&ordm; Registro','Remitente', 'Documento', 'Registrado','Respuesta','Estado','Ubicacion','Dias'],
         colModel:[
@@ -231,11 +345,13 @@ jQuery(document).ready(function(){
 							<a href="reportes.php?atencion=1" class="<?=(isset($get->atencion)? 'active':'')?>"
 								>Reporte por area de atenci&oacute;n</a>		|		
 							<a href="reportes.php?remitentes=1"  class="<?=(isset($get->remitentes)? 'active':'')?>"
-								>Reporte por Remitentes</a>						
+								>Reporte por Remitentes</a>				|		
+							<a href="reportes.php?tupa=1"  class="<?=(isset($get->tupa)? 'active':'')?>"
+								>Reporte por TUPA</a>						
 					<?}?>
 				        </p>
                         
-                        <?if( isset($get->atencion) || isset($get->remitentes) ){?>
+                        <?if( isset($get->atencion) || isset($get->remitentes) || isset($get->tupa) ){?>
                         <div id="panel">
                             <div id="loading" class="hidden ch">
                                 <div class="overlay">
@@ -261,6 +377,8 @@ jQuery(document).ready(function(){
                                         <?}?>
                                     </select>
                                     <input name="remitentes" value="1" type="hidden" />
+                                <?}else if( isset($get->tupa) ){?>
+                                    <input name="tupa" id="tupa" value="1" type="hidden" class="ch" />
                                 <?}else{?>
                                     <label>Ubicaci&oacute;n</label>
                                     <select class="ch" name="ubi" id="ubi">

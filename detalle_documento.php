@@ -18,6 +18,7 @@
     $doc_reporte = new Documento_Reporte($_REQUEST["id"]);
 	$verComentario = false;
 	$comentario = "";
+    #dump( $doc_reporte->getIdDocumento() );
 	
     if($doc_reporte->getEstado()=="A"){
         $textRpta = "Fecha de Respuesta";		
@@ -145,40 +146,135 @@
   </fieldset>  
   <div align="center">
   	<br/>
-    <table width="98%" border="0"  align="center" cellpadding="0" cellspacing="0" class="formularios" id="movimientos">
-      <tr bgcolor="#6699CC" class="Estilo7">
-        <td width="4%"><div align="center"><span class="msgok1">N&ordm; </span></div></td>
-        <td width="23%"><div align="center"><span class="msgok1">Origen</span></div></td>
-        <td width="23%"><div align="center"><span class="msgok1"> Destino</span></div></td>
-        <td width="15%"><div align="center"><span class="msgok1">Accion</span></div></td>
-        <td width="5%" align="center"><span class="msgok1">Categoria</span></td>
-        <td width="13%" align="center"><span class="msgok1">Fecha Movimiento</span></td>
-        <td align="center"><span class="msgok1">Estado</span></td>
-      </tr>
-      <? 
-	  	 $movimientos = $doc_reporte->getMovimientos();
-		
-		 $tmov = count($movimientos);
-         $cont = 1;
-         for( $h = 0; $h < $tmov; $h++ ){
-      ?>
-      <tr>
-        <td>
-          <div align="center">
-            <?=$h+1?>
-          </div></td>
-        <td><?=$movimientos[$h]["origen"]?></td>
-        <td><?=$movimientos[$h]["destino"]?></td>
-        <td><div align="center">
-          <?=$movimientos[$h]["accion"]?>
-        </div></td>
-        <td align="center" ><?=($movimientos[$h]["categoria"]==1)?"Original":"Copia"?></td>
-        <td align="center" ><?=$movimientos[$h]["fecha"]?></td>
-        <td align="center" ><?=$movimientos[$h]["estado"]?></td>
-      </tr>
-      <? }?>
-    </table>
+    <? /*
+        <table width="98%" border="0"  align="center" cellpadding="0" cellspacing="0" class="formularios" id="movimientos">
+          <tr bgcolor="#6699CC" class="Estilo7">
+            <td width="4%"><div align="center"><span class="msgok1">N&ordm; </span></div></td>
+            <td width="23%"><div align="center"><span class="msgok1">Origen</span></div></td>
+            <td width="23%"><div align="center"><span class="msgok1"> Destino</span></div></td>
+            <td width="15%"><div align="center"><span class="msgok1">Accion</span></div></td>
+            <td width="5%" align="center"><span class="msgok1">Categoria</span></td>
+            <td width="13%" align="center"><span class="msgok1">Fecha Movimiento</span></td>
+            <td align="center"><span class="msgok1">Estado</span></td>
+          </tr>
+          <? 
+             $movimientos = $doc_reporte->getMovimientos();
+            
+             $tmov = count($movimientos);
+             $cont = 1;
+             for( $h = 0; $h < $tmov; $h++ ){
+          ?>
+          <tr>
+            <td>
+              <div align="center">
+                <?=$h+1?>
+              </div></td>
+            <td><?=$movimientos[$h]["origen"]?></td>
+            <td><?=$movimientos[$h]["destino"]?></td>
+            <td><div align="center">
+              <?=$movimientos[$h]["accion"]?>
+            </div></td>
+            <td align="center" ><?=($movimientos[$h]["categoria"]==1)?"Original":"Copia"?></td>
+            <td align="center" ><?=$movimientos[$h]["fecha"]?></td>
+            <td align="center" ><?=$movimientos[$h]["estado"]?></td>
+          </tr>
+          <? }?>
+        </table>
+    
+    */ ?>
 	<br/>
+    
+    <!--################## New Historial #####################-->
+    
+    
+    		<?
+		/**********************************************************/
+		////REEMPLAZAR
+		/**********************************************************/
+		?>
+		<table width="98%" border="0" align="center" cellpadding="0" cellspacing="1"  >
+		<tr bgcolor="#6699CC" class="Estilo7">
+		  <td width="4%" ><div align="center" class="msgok1"><strong>N&ordm;</strong></div></td>
+			<td width="22%" ><div align="center" class="msgok1"><strong>ORIGEN</strong></div></td>
+			<td width="22%"><div align="center" class="msgok1"><strong>DESTINO</strong></div></td>
+			<td width="16%"><div align="center" class="msgok1"><strong>Acci&oacute;n</strong></div></td>
+			<td width="10%" ><div align="center" class="msgok1"><strong>Fecha y Hora</strong></div></td>
+			<td width="6%" ><div align="center" class="msgok1"><strong>Categor&iacute;a</strong></div></td>
+            <!--
+			<td width="12%"><div align="center" class="msgok1"><strong>Opciones</strong></div></td>
+            -->
+		</tr>
+		<?php
+        
+            $doc =  new Documento( $doc_reporte->getIdDocumento() );	
+            $his_base = $doc->getHistorialAtencionDocumentos();
+			$this_base = count($his_base);
+			$ultimo_original = 0;
+			
+			for($i = 0 ; $i < $this_base ;$i++){
+				if($his_base[$i]["original"] == 1 && $his_base[$i]["tipo"] != 6)
+					$ultimo_original = $i;
+			}
+			
+        	$cont = 0;
+        
+        for( $h = 0; $h < $this_base; $h++ ){
+            $clase = "class='historial'";
+            $archivo=array();
+            $observacion = trim($his_base[$h]['comentario']);
+            
+			if($his_base[$h]['tipo']==1){//Area a Area (Derivacion de documento)
+				$origen=$his_base[$h]['area']->GetNombre();
+				$destino=$his_base[$h]['area_destino']->GetNombre();
+			}
+			elseif($his_base[$h]['tipo']==0){//Area a Usuario
+					$origen=$his_base[$h]['area']->GetNombre();				
+					$destino=$his_base[$h]['destino']->GetNombreCompleto();
+				}
+				elseif($his_base[$h]['tipo']==2){//Usuario a su Area
+					$origen=$his_base[$h]['usuario']->GetNombreCompleto();
+					$destino=$his_base[$h]['area_destino']->GetNombre();
+					$archivo = $doc->obtenerAprobacionesEscaneadas($his_base[$h]['id']);
+				}
+				elseif($his_base[$h]['tipo']==3){//Usuario a Usuario en borradores
+                    $origen=$his_base[$h]['usuario']->GetNombreCompleto();
+					$destino=$his_base[$h]['destino']->GetNombreCompleto();
+                    $archivo = $doc->obtenerBorradoresEscaneados($his_base[$h]['id']);
+                    $clase = "class='filas'";
+                }
+				elseif($his_base[$h]['tipo']==4 ||$his_base[$h]['tipo']==5){//Usuario a Usuario en historial de atencion
+                    $origen=$his_base[$h]['usuario']->GetNombreCompleto();
+					$destino=$his_base[$h]['destino']->GetNombreCompleto();	
+					$archivo = $doc->obtenerJustificacionesEscaneadas($his_base[$h]['id']); 				
+                }	
+				elseif($his_base[$h]['tipo']==6){//Es de MESA a AREA
+                    $origen="DESPACHO GENERAL";
+					$destino=$his_base[$h]['area_destino']->GetNombre();
+                }
+				elseif($his_base[$h]['tipo']==7){//Es de AREA a MESA
+                    $origen=$his_base[$h]['area']->GetNombre();
+					$destino="DESPACHO GENERAL";
+                }						
+		?>
+		<tr <?=$clase?>>
+			<td  align="center" ><?php echo ++$cont ?></td>
+			<td><?php echo $origen?></td>
+			<td><?php echo $destino ?></td>
+			<td><?php echo ($his_base[$h]['tipo']!=7)?$his_base[$h]['accion']->GetNombre():"DEVOLVER A DESPACHO" ?></td>
+			<td align="center" ><?php echo $his_base[$h]['fecha'] ?></td>
+			<td align="center" ><?php if($his_base[$h]['original']==1){echo "Original";}else{echo "Copia";}?></td>
+            <!--
+			<td align="center" >                ###		            </td>
+            -->
+		</tr>
+        <? 
+       }
+    ?>
+    </table>
+    
+    
+    <!--######################### END New Historial #######################-->
+    
     <p align="right" style="width:98%;">
       <input name="imprimir" type="submit" class="boton" onclick="javascript:imprimirDocumento()" value="Imprimir" id="imprimir"/>
     </p>

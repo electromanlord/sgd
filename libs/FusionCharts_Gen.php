@@ -933,7 +933,7 @@ class FusionCharts{
 	   }
 	 }
 	 # Create single set element
-     #       <set value='30' />
+     #       <set value='30' />
      #       <set value='26' />
 
 	 function getSSDatasetXML(){

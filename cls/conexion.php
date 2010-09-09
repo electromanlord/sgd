@@ -10,8 +10,6 @@ var $psw  ="sernap";
 //var $psw  ="AreaProteg2007";
 var $db   ="sernanp";
 
-
-
 /*var $user ="root";
 var $psw  ="admin";*/
 
